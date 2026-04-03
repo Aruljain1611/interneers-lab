@@ -1,36 +1,32 @@
+from typing import Dict, Any
 from rest_framework import serializers
 from .repositories import ProductRepository, ProductCategoryRepository
+from .models import Product, ProductCategory  
 
 class ProductSerializer(serializers.Serializer):
-
-    product_repository = ProductRepository()
     
     name = serializers.CharField(required=True, max_length=200)
     description = serializers.CharField(required=True, max_length=500)
     brand = serializers.CharField(required=True, max_length=200)
-    price = serializers.DecimalField(min_value=0, max_digits=8, decimal_places=2)
-    quantity = serializers.IntegerField(min_value=0)
-    product_category = serializers.CharField()
-    created_at = serializers.DateTimeField(read_only = True)
-    updated_at = serializers.DateTimeField(read_only = True)
-
-    def create(self, validated_data):
-        return self.product_repository.add(validated_data)
-    
-    def update(self, instance, validated_data):
-        return self.product_repository.update(instance, validated_data)
+    price = serializers.DecimalField(required = True, min_value=0, max_digits=8, decimal_places=2)
+    quantity = serializers.IntegerField(required = True, min_value=0)
+    product_category = serializers.CharField(required = True)
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
 
 
 class ProductCategorySerializer(serializers.Serializer):
 
-    product_category_repository = ProductCategoryRepository()
-
     title = serializers.CharField(required=True, max_length=200)
     description = serializers.CharField(max_length=400)
 
-    def create(self, validated_data):
-        return self.product_category_repository.add(validated_data)
+class ProductFilterSerializer(serializers.Serializer):
     
-    def update(self, instance, validated_data):
-        return self.product_category_repository.update(instance, validated_data)
-
+    category = serializers.CharField(required= False, max_length = 200)
+    brand = serializers.CharField(required = False, max_length = 200)
+    min_price = serializers.DecimalField(required = False, min_value=0, max_digits=8, decimal_places=2)
+    max_price = serializers.DecimalField(required = False, min_value=0, max_digits=8, decimal_places=2)
+    is_available = serializers.BooleanField(required = False)
+    offset = serializers.IntegerField(required = True, min_value = 0)
+    limit = serializers.IntegerField(required = True, min_value = 10, max_value = 50)
+    order_by = serializers.CharField(required = False, max_length = 200)
