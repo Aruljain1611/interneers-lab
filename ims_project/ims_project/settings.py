@@ -122,10 +122,19 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 import mongoengine
+import os
+from pathlib import Path
+from dotenv import load_dotenv 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+MONGO_URI = "mongodb://admin:password@localhost:27017/inventory_db?authSource=admin&directConnection=true"
 
 mongoengine.connect(
-    db='inventory_db',
-    host='localhost',
-    port=27017,
-    # alias='default'
+    host=MONGO_URI,
+    alias='default' 
 )

@@ -4,7 +4,7 @@ from .repositories import ProductRepository, ProductCategoryRepository
 from .models import Product, ProductCategory  
 
 class ProductSerializer(serializers.Serializer):
-    
+    id = serializers.CharField(read_only= True)
     name = serializers.CharField(required=True, max_length=200)
     description = serializers.CharField(required=True, max_length=500)
     brand = serializers.CharField(required=True, max_length=200)
@@ -30,3 +30,4 @@ class ProductFilterSerializer(serializers.Serializer):
     offset = serializers.IntegerField(required = True, min_value = 0)
     limit = serializers.IntegerField(required = True, min_value = 10, max_value = 50)
     order_by = serializers.CharField(required = False, max_length = 200)
+    q = serializers.CharField(required = False, max_length = 200)

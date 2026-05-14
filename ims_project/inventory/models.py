@@ -1,6 +1,6 @@
 from __future__ import annotations  
 from typing import Optional, Dict, Any
-from mongoengine import Document, StringField, IntField, DecimalField, QuerySet, DateTimeField
+from mongoengine import Document, StringField, IntField, DecimalField, QuerySet, DateTimeField, ListField, FloatField
 import datetime
 
 class ProductQuerySet(QuerySet):
@@ -35,6 +35,37 @@ class ProductQuerySet(QuerySet):
             return True
         except self._document.DoesNotExist:
             return False 
+
+    def vector_search_with_filters(self, query_vector: list[float], mql_filters: dict, limit: int = 10) -> list[dict]:
+        
+        vector_stage = {
+            "index": "vector_index",     
+            "path": "embedding",
+            "queryVector": query_vector,
+            "numCandidates": limit * 10,
+            "limit": limit
+        }
+
+        if mql_filters:
+            vector_stage["filter"] = mql_filters
+
+        pipeline = [
+            { "$vectorSearch": vector_stage },
+            {
+                "$project": {
+                    "_id": {"$toString": "$_id"},
+                    "name": 1,
+                    "brand": 1,
+                    "description": 1,
+                    "price": 1,
+                    "quantity": 1,
+                    "product_category": 1,
+                    "score": { "$meta": "vectorSearchScore" }
+                }
+            }
+        ]
+
+        return list(self.aggregate(pipeline))
 
 
 class ProductCategoryQuerySet(QuerySet):
@@ -95,6 +126,7 @@ class Product(Document):
     product_category = StringField(max_length=200, required=True)
     created_at = DateTimeField(default=datetime.datetime.utcnow)
     updated_at = DateTimeField(default=datetime.datetime.utcnow)
+    embedding = ListField(FloatField())
 
     meta = {'collection': 'products', 'queryset_class': ProductQuerySet}
 
@@ -106,3 +138,48 @@ class Product(Document):
 
         self.save()
         return self
+    
+class KnowledgeDocumentQuerySet(QuerySet):
+    
+    def add_chunk(self, data: Dict[str, Any]) -> 'KnowledgeDocument':
+        doc: KnowledgeDocument = self._document(**data)
+        doc.save()
+        return doc
+
+    def clear_all_chunks(self) -> None:
+        self.delete()
+
+    def vector_search(self, query_vector: list[float], limit: int = 3) -> list[dict]:
+        pipeline = [
+            {
+                "$vectorSearch": {
+                    "index": "knowledge_vector_index",
+                    "path": "embedding",
+                    "queryVector": query_vector,
+                    "numCandidates": limit * 10,
+                    "limit": limit
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "content": 1,
+                    "source_file": 1,
+                    "score": {"$meta": "vectorSearchScore"}
+                }
+            }
+        ]
+        return list(self.aggregate(pipeline))
+
+
+class KnowledgeDocument(Document):
+    
+    source_file = StringField(required=True)
+    content = StringField(required=True)
+    embedding = ListField(FloatField(), required=True)
+    created_at = DateTimeField(default=datetime.datetime.utcnow)
+
+    meta = {
+        'collection': 'knowledge_documents',
+        'queryset_class': KnowledgeDocumentQuerySet
+    }

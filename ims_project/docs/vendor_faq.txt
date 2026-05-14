@@ -1,0 +1,19 @@
+Vendor and Supplier Operations FAQ
+
+Section A: Onboarding and Compliance
+Q: How do I become a registered vendor for the toy store?
+A: Prospective vendors must submit a comprehensive vendor application form through our digital supplier portal. Applications are reviewed quarterly by our merchandising team. You must provide proof of product safety compliance (e.g., ASTM F963 certification, CPSIA compliance testing) from a certified third-party laboratory for all toys before a purchase order can be generated.
+
+Q: Are there specific packaging requirements?
+A: Yes. All products must arrive retail-ready. This means every individual unit must have a scannable UPC barcode printed clearly on the back or bottom of the packaging. Plush items must be individually wrapped in polybags with suffocation warnings printed in English, Spanish, and French.
+
+Section B: Financials and Invoicing
+Q: What are your standard payment terms for suppliers?
+A: Our standard payment terms are Net 60 from the date the inventory is received and scanned into our distribution center, not from the date of shipment. Payments are issued via direct deposit (ACH) or wire transfer on the 1st and 15th of each month. We do not issue paper checks.
+
+Q: Do you require marketing co-op funds?
+A: For wholesale orders exceeding $50,000 annually, we require a 2% marketing co-op deduction, which goes toward featuring your products in our seasonal catalogs and digital advertising campaigns.
+
+Section C: Inventory Management
+Q: How does the store handle unsold vendor inventory?
+A: This depends on your vendor agreement type. For dropship vendors, no physical inventory is held at our facilities, so this does not apply. For wholesale vendors, unsold seasonal inventory (e.g., holiday-specific toys) may be subject to a buy-back clause. Under this clause, the vendor agrees to buy back unsold inventory at a 20% discount from the original wholesale price if it is not sold within 6 months of the season ending, as explicitly stipulated in your master vendor contract.
