@@ -1,2 +1,3 @@
 .DS_Store
-venv/
+venv/   
+ims_project/.env
